@@ -1,0 +1,16 @@
+[project]
+name = "daemon-tongue"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "accelerate>=1.13.0",
+    "beautifulsoup4>=4.15.0",
+    "datasets>=5.0.0",
+    "pandas>=3.0.3",
+    "scikit-learn>=1.9.0",
+    "torch>=2.12.0",
+    "transformers>=5.10.2",
+    "unidecode>=1.4.0",
+]

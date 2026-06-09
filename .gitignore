@@ -1,0 +1,22 @@
+# Model weights
+model/
+DAEMON_TONGUE_JUDGE/
+*.bin
+*.pt
+*.safetensors
+
+# Raw/copyrighted data
+data/raw/
+*.html
+lyrics.txt
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+*.egg-info/
+dist/
+
+# Env
+.env
+venv/
