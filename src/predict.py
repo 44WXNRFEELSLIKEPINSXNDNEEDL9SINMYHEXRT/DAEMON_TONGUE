@@ -4,13 +4,21 @@ import re
 import pandas as pd
 from unidecode import unidecode
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
+from huggingface_hub.utils import RepositoryNotFoundError
 
-MODEL_DIR = "./DAEMON_TONGUE_JUDGE" if os.path.exists("./DAEMON_TONGUE_JUDGE") \
-            else "44WXNRFEELSLIKEPINSANDNEEDLESINMYHEART/DAEMON_TONGUE_JUDGE"
+try:
+    MODEL_DIR = "./DAEMON_TONGUE_JUDGE" if os.path.exists("./DAEMON_TONGUE_JUDGE") \
+                else "44WXNRFEELSLIKEPINSANDNEEDLESINMYHEART/DAEMON_TONGUE_JUDGE"
 
-# Load tokenizer and model (instantiate once in REPL)
-tokenizer = AutoTokenizer.from_pretrained(MODEL_DIR)
-model = AutoModelForSequenceClassification.from_pretrained(MODEL_DIR)
+    # Load tokenizer and model (instantiate once in REPL)
+    tokenizer = AutoTokenizer.from_pretrained(MODEL_DIR)
+    model = AutoModelForSequenceClassification.from_pretrained(MODEL_DIR)
+except RepositoryNotFoundError:
+    print("Model not found on HuggingFace. Train it first: uv run src/train.py")
+    exit(1)
+except OSError:
+    print("Model files corrupted or incomplete. Retrain: uv run src/train.py")
+    exit(1)
 model.eval()
 
 # Move model to GPU if available for faster inference
