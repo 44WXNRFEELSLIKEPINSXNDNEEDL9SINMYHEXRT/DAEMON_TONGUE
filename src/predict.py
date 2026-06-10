@@ -69,23 +69,3 @@ if __name__ == "__main__":
         
         status = "🔥 DAEMON" if res["label"] == 1 else "✨ MORTAL"
         print(f"Result: {status} | Confidence: {res['confidence'] * 100}%")
-# ==========================================
-# Interactive / pandas usage examples (commented)
-# ==========================================
-
-# Quick console test:
-# quotes = ["My metal body is a tomb for a god.", "Binary screams in a dead language."]
-# print(predict(quotes))
-
-# Efficient DataFrame processing (avoid .apply() for speed):
-# df = pd.read_csv("kayn.csv")
-# df['phrase'] = df['phrase'].astype(str)  # guard against NaN
-
-# Run predictions in one call for the whole column
-# predictions = predict(df["phrase"].tolist(), batch_size=64)
-
-# Expand results back into DataFrame columns
-# df["prediction"] = [p["label"] for p in predictions]
-# df["confidence"] = [p["confidence"] for p in predictions]
-
-# df.to_csv("predictions.csv", index=False)
