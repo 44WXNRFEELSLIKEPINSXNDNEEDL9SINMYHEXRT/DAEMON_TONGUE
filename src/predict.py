@@ -1,10 +1,12 @@
+import os
 import torch
 import re
 import pandas as pd
 from unidecode import unidecode
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
-MODEL_DIR = "./DAEMON_TONGUE_JUDGE"
+MODEL_DIR = "./DAEMON_TONGUE_JUDGE" if os.path.exists("./DAEMON_TONGUE_JUDGE") \
+            else "44WXNRFEELSLIKEPINSANDNEEDLESINMYHEART/DAEMON_TONGUE_JUDGE"
 
 # Load tokenizer and model (instantiate once in REPL)
 tokenizer = AutoTokenizer.from_pretrained(MODEL_DIR)
