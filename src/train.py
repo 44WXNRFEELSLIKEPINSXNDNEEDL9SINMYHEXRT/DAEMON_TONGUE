@@ -12,7 +12,7 @@ from transformers import (
 )
 
 MODEL_NAME  = "roberta-base"
-DATA_PATH   = "dataset.csv"
+DATA_PATH   = "data/dataset.csv"
 OUTPUT_DIR  = "./DAEMON_TONGUE_JUDGE"
 NUM_LABELS  = 2
 EPOCHS      = 4
