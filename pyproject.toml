@@ -1,19 +1,42 @@
 [project]
 name = "daemon-tongue"
 version = "0.1.0"
-description = "Add your description here"
+description = "A classifier for grimdark phrases"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "accelerate>=1.13.0",
     "beautifulsoup4>=4.15.0",
     "datasets>=5.0.0",
+    "fastapi>=0.121.0",
     "gradio>=6.17.3",
     "huggingface-hub>=1.18.0",
     "numpy>=2.4.6",
+    "requests>=2.32.0",
     "pandas>=3.0.3",
     "scikit-learn>=1.9.0",
     "torch>=2.12.0",
     "transformers>=5.10.2",
     "unidecode>=1.4.0",
+    "uvicorn>=0.38.0",
 ]
+
+[project.optional-dependencies]
+dedup = ["sentence-transformers>=5.1.2"]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+    "responses>=0.25.9",
+    "ruff>=0.15.0",
+]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "src/scraper"]
+
+[tool.ruff.lint]
+select = ["E4", "E5", "E7", "E9", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

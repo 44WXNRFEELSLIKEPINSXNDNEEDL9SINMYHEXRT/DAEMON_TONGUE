@@ -11,13 +11,13 @@ from transformers import (
     TrainingArguments,
 )
 
+from config import DATASET, MAX_LEN, MODEL_DIR
+from text import normalize
+
 MODEL_NAME  = "roberta-base"
-DATA_PATH   = "data/dataset.csv"
-OUTPUT_DIR  = "./DAEMON_TONGUE_JUDGE"
 NUM_LABELS  = 2
 EPOCHS      = 4
 BATCH_SIZE  = 16
-MAX_LEN     = 128
 LR          = 2e-5
 
 
@@ -32,12 +32,15 @@ def compute_metrics(eval_pred):
     }
 
 def main():
-    df = pd.read_csv(DATA_PATH)
+    df = pd.read_csv(DATASET)
     assert {"phrase", "label"}.issubset(df.columns)
 
     df = df.dropna(subset=["phrase", "label"])
-    df["phrase"] = df["phrase"].astype(str)
     df["label"]  = df["label"].astype(int)
+    # Same transform as inference (src/predict.py), otherwise the model trains on
+    # punctuation and casing it never sees at judgment time.
+    df["phrase"] = df["phrase"].map(normalize)
+    df = df[df["phrase"].str.strip().astype(bool)]
 
     train_df, val_df = train_test_split(
         df, test_size=0.15, stratify=df["label"], random_state=42
@@ -69,7 +72,7 @@ def main():
     data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
 
     args = TrainingArguments(
-        output_dir                  = OUTPUT_DIR,
+        output_dir                  = str(MODEL_DIR),
         num_train_epochs            = EPOCHS,
         per_device_train_batch_size = BATCH_SIZE,
         per_device_eval_batch_size  = BATCH_SIZE,
@@ -96,9 +99,9 @@ def main():
     )
 
     trainer.train()
-    trainer.save_model(OUTPUT_DIR)
-    tokenizer.save_pretrained(OUTPUT_DIR)
-    print(f"\nModel saved to {OUTPUT_DIR}")
+    trainer.save_model(str(MODEL_DIR))
+    tokenizer.save_pretrained(str(MODEL_DIR))
+    print(f"\nModel saved to {MODEL_DIR}")
 
     preds_output = trainer.predict(val_dataset)
     logits = (

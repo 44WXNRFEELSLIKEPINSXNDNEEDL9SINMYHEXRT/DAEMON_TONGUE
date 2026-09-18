@@ -1,7 +1,10 @@
 import gradio as gr
 from transformers import pipeline
 
-clf = pipeline("text-classification", model="44WXNRFEELSLIKEPINSANDNEEDLESINMYHEART/DAEMON_TONGUE_JUDGE")
+clf = pipeline(
+    "text-classification",
+    model="44WXNRFEELSLIKEPINSANDNEEDLESINMYHEART/DAEMON_TONGUE_JUDGE",
+)
 
 def judge(phrase):
     result = clf(phrase)[0]

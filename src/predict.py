@@ -1,81 +1,100 @@
-import os
+"""Classify phrases as DAEMON (grimdark) or MORTAL.
+
+Usage:
+    uv run src/predict.py          # interactive prompt
+"""
+
 import torch
-import re
-import pandas as pd
-from unidecode import unidecode
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from huggingface_hub.utils import RepositoryNotFoundError
+from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
-try:
-    MODEL_DIR = "./DAEMON_TONGUE_JUDGE" if os.path.exists("./DAEMON_TONGUE_JUDGE") \
-                else "44WXNRFEELSLIKEPINSANDNEEDLESINMYHEART/DAEMON_TONGUE_JUDGE"
+from config import HF_REPO, LABEL_NAMES, MAX_LEN, MODEL_DIR
+from text import normalize
 
-    # Load tokenizer and model (instantiate once in REPL)
-    tokenizer = AutoTokenizer.from_pretrained(MODEL_DIR)
-    model = AutoModelForSequenceClassification.from_pretrained(MODEL_DIR)
-except RepositoryNotFoundError:
-    print("Model not found on HuggingFace. Train it first: uv run src/train.py")
-    exit(1)
-except OSError:
-    print("Model files corrupted or incomplete. Retrain: uv run src/train.py")
-    exit(1)
-model.eval()
+MAX_INPUT_CHARS = 4000
 
-# Move model to GPU if available for faster inference
-device = "cuda" if torch.cuda.is_available() else "cpu"
-model.to(device)
+_state: dict = {}
 
-def normalize(text: str) -> str:
-    text = unidecode(text)
-    text = re.sub(r'[^\w\s]', '', text)
-    return text.lower().strip()
 
-def predict(phrases: list[str], batch_size: int = 32) -> list[dict]:
-    """Accept a list of phrases, run batched inference, return list of result dicts."""
+def load_model(revision: str | None = None):
+    """Load tokenizer + model once; later calls reuse the cached pair."""
+    if _state:
+        return _state["tokenizer"], _state["model"], _state["device"]
+
+    local = MODEL_DIR.exists()
+    source = str(MODEL_DIR) if local else HF_REPO
+    kwargs = {} if local or not revision else {"revision": revision}
+
+    try:
+        tokenizer = AutoTokenizer.from_pretrained(source, **kwargs)
+        model = AutoModelForSequenceClassification.from_pretrained(source, **kwargs)
+    except RepositoryNotFoundError:
+        raise SystemExit(
+            "Model not found on HuggingFace. Train it first: uv run src/train.py"
+        ) from None
+    except OSError:
+        raise SystemExit(
+            "Model files corrupted or incomplete. Retrain: uv run src/train.py"
+        ) from None
+
+    model.eval()
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    model.to(device)
+
+    _state.update(tokenizer=tokenizer, model=model, device=device)
+    return tokenizer, model, device
+
+
+def predict(phrases: list[str], batch_size: int = 32, revision: str | None = None) -> list[dict]:
+    """Run batched inference and return one result dict per input phrase."""
     if not phrases:
         return []
-        
+
+    tokenizer, model, device = load_model(revision)
     results = []
-    
-    # Process in batches to balance memory use and speed
-    for i in range(0, len(phrases), batch_size):
-        batch_phrases = phrases[i : i + batch_size]
-        batch_phrases = [normalize(p) for p in batch_phrases]
+
+    for start in range(0, len(phrases), batch_size):
+        batch = phrases[start : start + batch_size]
 
         inputs = tokenizer(
-            batch_phrases, 
-            return_tensors="pt", 
+            [normalize(p) for p in batch],
+            return_tensors="pt",
             truncation=True,
-            padding=True, 
-            max_length=128
+            padding=True,
+            max_length=MAX_LEN,
         ).to(device)
-        
+
         with torch.no_grad():
-            logits = model(**inputs).logits
-            probs = torch.softmax(logits, dim=-1)
-            
-        # Collect results for this batch
-        for phrase, prob in zip(batch_phrases, probs):
+            probs = torch.softmax(model(**inputs).logits, dim=-1)
+
+        # Keep the caller's original text: staging CSVs are labeled by hand and
+        # normalized text is unreadable there.
+        for phrase, prob in zip(batch, probs, strict=True):
             label = int(prob.argmax())
             results.append({
                 "phrase": phrase,
-                "label": label,            # 1 = daemon, 0 = mortal
+                "label": label,
                 "confidence": round(prob[label].item(), 3),
             })
-            
+
     return results
 
-if __name__ == "__main__":
+
+def main():
     while True:
         user_input = input("\nInput: ").strip()
-        if len(user_input) > 4000:
-            print("Error: Input exceeds 4000 characters. Please enter a shorter phrase.")
-            continue
         if not user_input:
             print("Exiting input mode.")
             break
-            
-        res = predict([user_input])[0]
-        
-        status = "🔥 DAEMON" if res["label"] == 1 else "✨ MORTAL"
-        print(f"Result: {status} | Confidence: {res['confidence'] * 100}%")
+        if len(user_input) > MAX_INPUT_CHARS:
+            print(f"Error: Input exceeds {MAX_INPUT_CHARS} characters. Enter a shorter phrase.")
+            continue
+
+        result = predict([user_input])[0]
+        status = "🔥 DAEMON" if result["label"] == 1 else "✨ MORTAL"
+        print(f"Result: {status} ({LABEL_NAMES[result['label']]}) "
+              f"| Confidence: {result['confidence'] * 100:.1f}%")
+
+
+if __name__ == "__main__":
+    main()
