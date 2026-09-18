@@ -1,9 +1,21 @@
 # DAEMON TONGUE
 
+<p align="center">
+  <img src="pictures/image.png" alt="4FUN">
+<p>
+
 > A classifier for grimdark phrases — dark, poetic, fatalistic aesthetic.
 
 Trained on dark quotes and lyrics.  
 Classifies phrases as **DAEMON** (grimdark aesthetic) or **MORTAL** (everything else).
+
+<p align="center">
+  <img src="pictures/spaces.png" alt="Spaces interface">
+<p>
+
+HuggingFace Spaces link: [`44WXNRFEELSLIKEPINSANDNEEDLESINMYHEART/DAEMON_TONGUE`](https://huggingface.co/spaces/44WXNRFEELSLIKEPINSANDNEEDLESINMYHEART/DAEMON_TONGUE)
+
+Just a classifier. Nothing unusual.
 
 ---
 
@@ -45,11 +57,11 @@ reworded near-duplicates (needs `uv sync --extra dedup`).
 
 ### Sources
 
-| Route | Wikis | Status |
-| ----- | ----- | ------ |
-| Wikiquote API | 40k, Diablo, Souls, Lovecraft, Poe, Milton, Dante | works |
-| Fextralife API | Elden Ring, DS3, Demon's Souls, Sekiro, Bloodborne | works |
-| Fandom API | LoL, Darkest Dungeon, Dark Souls 1 | **403 — API clients blocked** |
+| Route | Wikis |
+| ----- | ----- |
+| Wikiquote API | 40k, Diablo, Souls, Lovecraft, Poe, Milton, Dante |
+| Fextralife API | Elden Ring, DS3, Demon's Souls, Sekiro, Bloodborne |
+| Fandom API | LoL, Darkest Dungeon, Dark Souls 1 |
 
 Fandom now refuses scripted clients. Save the page from a browser and pass
 `--local <dir>` to the scraper instead.
@@ -84,7 +96,7 @@ clf = pipeline("text-classification", model="44WXNRFEELSLIKEPINSANDNEEDLESINMYHE
 clf("The blood of the fallen will anoint me")
 # [{'label': 'DAEMON', 'score': 0.94}]
 ```
-HuggingFace Spaces link: [`44WXNRFEELSLIKEPINSANDNEEDLESINMYHEART/DAEMON_TONGUE`](https://huggingface.co/spaces/44WXNRFEELSLIKEPINSANDNEEDLESINMYHEART/DAEMON_TONGUE)
+
 ## Labels
 
 | Label | Name   | Meaning                                       |
@@ -99,6 +111,14 @@ HuggingFace Spaces link: [`44WXNRFEELSLIKEPINSANDNEEDLESINMYHEART/DAEMON_TONGUE`
 
 Обучен на тёмных цитатах и лирике. 
 Классифицирует фразы как **DAEMON** (гримдарк-эстетика) или **MORTAL** (всё остальное).
+
+<p align="center">
+  <img src="pictures/spaces.png" alt="Spaces interface">
+<p>
+
+Ссылка на HuggingFace Spaces: [`44WXNRFEELSLIKEPINSANDNEEDLESINMYHEART/DAEMON_TONGUE`](https://huggingface.co/spaces/44WXNRFEELSLIKEPINSANDNEEDLESINMYHEART/DAEMON_TONGUE)
+
+Просто классификатор. Ничего необычного.
 
 ---
 
@@ -138,11 +158,11 @@ uv run src/train.py && uv run src/push.py --tag v2            # 5. переоб�
 
 ### Источники
 
-| Маршрут | Вики | Статус |
-| ------- | ---- | ------ |
-| Wikiquote API | 40k, Diablo, Souls, Лавкрафт, По, Мильтон, Данте | работает |
-| Fextralife API | Elden Ring, DS3, Demon's Souls, Sekiro, Bloodborne | работает |
-| Fandom API | LoL, Darkest Dungeon, Dark Souls 1 | **403 — клиенты API заблокированы** |
+| Маршрут | Вики |
+| ------- | ---- |
+| Wikiquote API | 40k, Diablo, Souls, Лавкрафт, По, Мильтон, Данте |
+| Fextralife API | Elden Ring, DS3, Demon's Souls, Sekiro, Bloodborne |
+| Fandom API | LoL, Darkest Dungeon, Dark Souls 1 |
 
 Fandom больше не отдаёт данные скриптам. Сохраните страницу из браузера и
 передайте скрейперу `--local <dir>`.
@@ -176,7 +196,6 @@ clf = pipeline("text-classification", model="44WXNRFEELSLIKEPINSANDNEEDLESINMYHE
 clf("The blood of the fallen will anoint me")
 ```
 
-Ссылка на HuggingFace Spaces: [`44WXNRFEELSLIKEPINSANDNEEDLESINMYHEART/DAEMON_TONGUE`](https://huggingface.co/spaces/44WXNRFEELSLIKEPINSANDNEEDLESINMYHEART/DAEMON_TONGUE)
 ## Метки
 
 | Метка | Название | Значение                                                 |
