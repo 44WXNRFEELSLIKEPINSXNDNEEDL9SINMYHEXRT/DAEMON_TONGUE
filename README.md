@@ -5,8 +5,8 @@
 </div>
 
 <p align="center">
-  <img src="pictures/image.png" alt="4FUN" style="max-width: 75%; height: 75%;>
-<p>
+  <img src="pictures/image.png" alt="4FUN" style="max-width: 75%; height: 75%;" />
+</p>
 
 > A classifier for grimdark phrases — dark, poetic, fatalistic aesthetic.
 
@@ -14,8 +14,9 @@ Trained on dark quotes and lyrics.
 Classifies phrases as **DAEMON** (grimdark aesthetic) or **MORTAL** (everything else).
 
 <p align="center">
-     <img src="pictures/mortal.png" width="45%" /> <img src="pictures/daemon.png" width="45%" />
-<p>
+  <img src="pictures/mortal.png" width="45%" /> 
+  <img src="pictures/daemon.png" width="45%" />
+</p>
 
 HuggingFace Spaces link: [`44WXNRFEELSLIKEPINSANDNEEDLESINMYHEART/DAEMON_TONGUE`](https://huggingface.co/spaces/44WXNRFEELSLIKEPINSANDNEEDLESINMYHEART/DAEMON_TONGUE)
 
@@ -117,8 +118,8 @@ clf("The blood of the fallen will anoint me")
 </div>
 
 <p align="center">
-  <img src="pictures/image.png" alt="4FUN" style="max-width: 75%; height: 75%;>
-<p>
+  <img src="pictures/image.png" alt="4FUN" style="max-width: 75%; height: 75%;" />
+</p>
 
 > Классификатор гримдарк-фраз — тёмная, поэтическая, фаталистическая эстетика.
 
@@ -126,8 +127,9 @@ clf("The blood of the fallen will anoint me")
 Классифицирует фразы как **DAEMON** (гримдарк-эстетика) или **MORTAL** (всё остальное).
 
 <p align="center">
-     <img src="pictures/mortal.png" width="45%" /> <img src="pictures/daemon.png" width="45%" />
-<p>
+  <img src="pictures/mortal.png" width="45%" /> 
+  <img src="pictures/daemon.png" width="45%" />
+</p>
 
 Ссылка на HuggingFace Spaces: [`44WXNRFEELSLIKEPINSANDNEEDLESINMYHEART/DAEMON_TONGUE`](https://huggingface.co/spaces/44WXNRFEELSLIKEPINSANDNEEDLESINMYHEART/DAEMON_TONGUE)
 
@@ -246,9 +248,9 @@ clf("The blood of the fallen will anoint me")
 - **Обновление UI** Старый и новый интерфейс HF Spaces
 <p align="center">
      <img src="pictures/old_spaces.png">
-<p>
+</p>
 <p align="center">
-     <img src="pictures/spaces.png" style="max-width: 768px; height: 40%;>
-<p>
+     <img src="pictures/spaces.png" style="max-width: 768px; height: 40%;">
+</p>
 
 > *Модель на HF на 19.09.26 еще не обновлена*
