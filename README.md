@@ -1,7 +1,11 @@
-# DAEMON TONGUE
+<a id="english"></a>
+<div align="center">
+
+  **[English](#english) | [Русский](#russian)**
+</div>
 
 <p align="center">
-  <img src="pictures/image.png" alt="4FUN">
+  <img src="pictures/image.png" alt="4FUN" style="max-width: 75%; height: 75%;>
 <p>
 
 > A classifier for grimdark phrases — dark, poetic, fatalistic aesthetic.
@@ -105,7 +109,16 @@ clf("The blood of the fallen will anoint me")
 | `0`   | MORTAL | Neutral, mechanical, plainly aggressive       |
 
 ---
-# DAEMON TONGUE
+
+<a id="russian"></a>
+<div align="center">
+
+  **[English](#english) | [Русский](#russian)**
+</div>
+
+<p align="center">
+  <img src="pictures/image.png" alt="4FUN" style="max-width: 75%; height: 75%;>
+<p>
 
 > Классификатор гримдарк-фраз — тёмная, поэтическая, фаталистическая эстетика.
 
