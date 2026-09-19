@@ -14,7 +14,7 @@ Trained on dark quotes and lyrics.
 Classifies phrases as **DAEMON** (grimdark aesthetic) or **MORTAL** (everything else).
 
 <p align="center">
-  <img src="pictures/spaces.png" alt="Spaces interface">
+     <img src="pictures/mortal.png" width="45%" /> <img src="pictures/daemon.png" width="45%" />
 <p>
 
 HuggingFace Spaces link: [`44WXNRFEELSLIKEPINSANDNEEDLESINMYHEART/DAEMON_TONGUE`](https://huggingface.co/spaces/44WXNRFEELSLIKEPINSANDNEEDLESINMYHEART/DAEMON_TONGUE)
@@ -126,7 +126,7 @@ clf("The blood of the fallen will anoint me")
 Классифицирует фразы как **DAEMON** (гримдарк-эстетика) или **MORTAL** (всё остальное).
 
 <p align="center">
-  <img src="pictures/spaces.png" alt="Spaces interface">
+     <img src="pictures/mortal.png" width="45%" /> <img src="pictures/daemon.png" width="45%" />
 <p>
 
 Ссылка на HuggingFace Spaces: [`44WXNRFEELSLIKEPINSANDNEEDLESINMYHEART/DAEMON_TONGUE`](https://huggingface.co/spaces/44WXNRFEELSLIKEPINSANDNEEDLESINMYHEART/DAEMON_TONGUE)
@@ -242,6 +242,13 @@ clf("The blood of the fallen will anoint me")
 - **Предсказания затирали исходный текст.** `predict()` возвращал нормализованную фразу, и она попадала в `high_confidence_review.csv`, а оттуда в датасет. Теперь возвращается оригинал.
 - **Скрейперы затирали staging-файлы.** Перезапуск скрейпера перезаписывал файл целиком и стирал уже проставленные метки. Теперь запись идёт слиянием по фразе.
 - **Добавление API.** Пока что не запушено на HF, но оно само по себе это немного избыточно, так как это уже представлено в HF Spaces (хоть и менее продуктивное), также как и сама модель, к которой можно получить доступ через HF Inference API, третий способ вызова кажется действительно лишним, но он существует просто как возможность.
-- **Разметка.** Новые данные пока что не размечались, желания делать это другой моделью (вероятно, какой-нибудь LLM) нет, в основном потому что ее не так просто передать, это 100% возможно, но я делаю это как чувствую для себя. добавлено лишь пару дополнений в самый первый базовый датасет, например: модель сильно триггерилась на слово corpse, так что такие словосочетания как "my corpse" выдавали около 70% уверенности в DAEMON, что, конечно, не должно быть так.
+- **Разметка.** Новые данные пока что не размечались, желания делать это другой моделью (вероятно, какой-нибудь LLM) нет, в основном потому что ее не так просто передать, это 100% возможно, но я делаю это как чувствую для себя. Модель уже неплохо находит необходимую эстетику, так что сейчас приоритетнее убрать ложную классификацию. Пока что добавлено лишь пару дополнений в самый первый базовый датасет, например: модель сильно триггерилась на слово corpse, так что такие словосочетания как "my corpse" выдавали около 70% уверенности в DAEMON, что, конечно, не должно быть так. Есть небольшие проблемы с триггером на повторение слов.
+- **Обновление UI** Старый и новый интерфейс HF Spaces
+<p align="center">
+     <img src="pictures/old_spaces.png">
+<p>
+<p align="center">
+     <img src="pictures/spaces.png" style="max-width: 768px; height: 40%;>
+<p>
 
 > *Модель на HF на 19.09.26 еще не обновлена*

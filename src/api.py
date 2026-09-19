@@ -1,14 +1,19 @@
 """HTTP API around the DAEMON_TONGUE classifier.
 
+Serves the JSON endpoints and mounts the Gradio UI at /, both backed by the
+same in-process model.
+
 Usage:
     uv run uvicorn api:app --app-dir src --port 8000
 """
 
 from contextlib import asynccontextmanager
 
+import gradio as gr
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
 
+from app import CSS, HEAD, THEME, demo
 from config import LABEL_NAMES
 from predict import load_model, predict
 
@@ -57,3 +62,7 @@ def judge_one(request: PhraseRequest) -> Judgment:
 @app.post("/predict/batch", response_model=list[Judgment])
 def judge_batch(request: BatchRequest) -> list[Judgment]:
     return [to_judgment(result) for result in predict(request.phrases, batch_size=64)]
+
+
+# Mounted last so the routes above keep their paths; the UI takes what is left.
+app = gr.mount_gradio_app(app, demo, path="/", theme=THEME, css=CSS, head=HEAD)
