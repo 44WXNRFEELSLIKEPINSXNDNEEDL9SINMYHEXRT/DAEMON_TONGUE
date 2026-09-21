@@ -114,8 +114,13 @@ CSS = f"""
 footer {{ display: none !important; }}
 
 /* --- masthead --------------------------------------------------------- */
-#masthead {{ text-align: center; margin-bottom: 2.4rem; }}
-#masthead img {{ display: block; margin: 0 auto; width: min(100%, 420px); height: auto; }}
+#masthead {{ padding-bottom: 1.6rem; }}
+/* Percent margins resolve against this box's width, so the caption keeps its
+   place in the logo at any size. Below the lettering (bottom ~24% of the art)
+   only the tail remains, at 71-85% of the width; the caption fills the empty
+   band to its left and the tail hangs beside it. */
+.masthead__art {{ width: min(100%, 600px); margin: 0 auto; }}
+#masthead img {{ display: block; width: 100%; height: auto; }}
 #masthead .wordmark {{
   color: var(--blush);
   font-family: var(--display);
@@ -123,13 +128,22 @@ footer {{ display: none !important; }}
   font-style: italic;
   font-weight: 900;
   margin: 0;
+  text-align: center;
 }}
-#masthead p {{
-  margin: 0.6rem auto 0;
-  max-width: 44ch;
+#masthead p.masthead__caption {{
+  width: 64%;
+  margin: -13% 0 0 3%;
+  padding-bottom: 5%;  /* room for the tail tip; padding, so it cannot collapse */
   font-size: 0.95rem;
-  line-height: 1.65;
+  line-height: 1.6;
   color: var(--mute);
+  text-align: right;
+}}
+#masthead .wordmark + p.masthead__caption {{
+  margin: 0.6rem auto 0;
+  padding: 0;
+  text-align: center;
+  width: auto;
 }}
 
 /* --- the phrase you submit -------------------------------------------- */
@@ -275,6 +289,7 @@ footer {{ display: none !important; }}
 }}
 
 @media (max-width: 480px) {{
+  #masthead p.masthead__caption {{ width: 63%; font-size: 0.74rem; line-height: 1.45; }}
   .verdict {{ padding: 1.6rem 1.1rem 1.5rem; }}
   .scale {{ gap: 0.55rem; }}
   .scale__pole {{ font-size: 0.7rem; letter-spacing: 0.03em; }}
@@ -342,9 +357,9 @@ def judge(phrase: str) -> str:
 
 with gr.Blocks(title="DaemonTongue", fill_width=False) as demo:
     gr.HTML(
-        f'<div id="masthead">{_logo_tag()}'
-        "<p>A phrase is either grimdark or it isn't. Submit one and find out "
-        "which side of the line it falls on.</p></div>",
+        f'<div id="masthead"><div class="masthead__art">{_logo_tag()}'
+        '<p class="masthead__caption">A phrase is either grimdark or it isn\'t. '
+        "Submit one and find out which side of the line it falls on.</p></div></div>",
         elem_id="masthead-wrap",
     )
 
